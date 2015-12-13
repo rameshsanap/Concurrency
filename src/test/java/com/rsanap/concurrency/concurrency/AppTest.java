@@ -34,7 +34,7 @@ public class AppTest
     public void testApp()
     {
         assertTrue( true );
-        App app = new App();
+        ExecutorEx app = new ExecutorEx();
         app.main(null);
     }
 }
