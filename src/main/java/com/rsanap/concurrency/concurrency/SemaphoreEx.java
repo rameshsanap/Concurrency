@@ -17,9 +17,9 @@ public class SemaphoreEx {
 
 						System.out.printf("%s acquiring %s%n", threadName,
 								item = pool.getAvailableItem());
-						Thread.sleep((long) (5000 * Math.random()));
+						Thread.sleep((long) (50 * Math.random()));
 						pool.releaseItem(item);
-						Thread.sleep((long) (5000 * Math.random()));
+						
 						System.out.printf("%s releasing item %s%n", threadName,
 								item);
 					}
@@ -30,7 +30,7 @@ public class SemaphoreEx {
 			}
 		};
 		ExecutorService[] executorService = new ExecutorService[PoolEx.MAX_LIMIT + 1];
-		for (int i = 0; i < PoolEx.MAX_LIMIT; i++) {
+		for (int i = 0; i < executorService.length; i++) {
 			executorService[i] = Executors.newSingleThreadExecutor();
 			executorService[i].execute(runnable);
 		}
@@ -48,7 +48,7 @@ class PoolEx {
 			items[index] = "Item " + index;
 	}
 
-	public String getAvailableItem() throws InterruptedException {
+	public synchronized String getAvailableItem() throws InterruptedException {
 		semaphore.acquire();
 		for (int i = 0; i < MAX_LIMIT; i++) {
 			if (!used[i]) {
@@ -59,7 +59,7 @@ class PoolEx {
 		return null;
 	}
 
-	public void releaseItem(String item) {
+	public  void releaseItem(String item) {
 		for (int i = 0; i < MAX_LIMIT; i++) {
 			if (items[i] == item) {
 				if (used[i]) {
